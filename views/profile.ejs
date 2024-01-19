@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Setup Your Profile</title>
+</head>
+<body>
+  <h1>Welcome, <%= Username %></h1>
+  <form action="/setup-profile/<%= Username %>" method="POST">
+    <label for="profilePicture">Profile Picture URL:</label>
+    <input type="text" id="profilePicture" name="profilePicture" required>
+    
+    <label for="aboutMe">About Me:</label>
+    <textarea id="aboutMe" name="aboutMe" required></textarea>
+
+    <button type="submit">Save Profile</button>
+  </form>
+</body>
+</html>

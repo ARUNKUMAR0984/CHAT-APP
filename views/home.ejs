@@ -1,0 +1,284 @@
+<!-- views/chat.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat App</title>
+  <style>
+    /* Shared styles for both light and dark modes */
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      transition: background-color 0.3s;
+      background-color: #f4f4f4; /* Light mode background color */
+      color: #333; /* Light mode text color */
+    }
+    .reply-container {
+      display: none;
+    }
+
+    h1 {
+      color: #4CAF50;
+      font-size: 50px;
+    }
+
+    .chat-container {
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 20px;
+      background-color: #4CAF50; /* Light mode container background color */
+    }
+
+    .chat-header,
+    .search {
+      padding: 15px;
+      text-align: center;
+      font-size: 20px;
+      border-bottom: 1px solid #2E8B57;
+      background-color: #4CAF50; /* Light mode header background color */
+      color: #fff; /* Light mode header text color */
+    }
+
+    .chat-messages {
+      max-height: 400px;
+      overflow-y: auto;
+      padding: 10px;
+      background-color: #f9f9f9; /* Light mode messages background color */
+    }
+
+    .message {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .message .user {
+      font-weight: bold;
+      color: #4CAF50;
+      margin-right: 8px;
+    }
+
+    .message .text {
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      max-width: 70%;
+    }
+
+    .message.sent .text {
+      color: #ffffff; /* Light mode sent message text color */
+      background-color: #63c366;
+    }
+
+    .chat-input {
+      display: flex;
+      padding: 10px;
+    }
+
+    .input-field {
+      flex: 1;
+      padding: 10px;
+      margin-right: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      transition: border-color 0.3s;
+    }
+
+    .input-field:focus {
+      border-color: #4CAF50;
+    }
+
+    #send-button {
+      background-color: #ffffff;
+      color: #000000;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    #send-button1 {
+      background-color: #ffffff;
+      color: #000000;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #send-button:hover {
+      background-color: #45a049;
+    }
+
+    /* Additional styling for search bar and results */
+    #searchInput {
+      padding: 8px;
+      margin-right: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    #searchResults {
+      list-style: none;
+      padding: 0;
+    }
+
+    #searchResults li {
+      margin-bottom: 8px;
+    }
+  </style>
+  <!-- Dark mode styles -->
+  
+  <style id="dark-mode">
+    body.dark-mode {
+      background-color: #2f2e2e; /* Dark mode background color */
+      color: #ffffff; /* Dark mode text color */
+    }
+  
+    body.dark-mode h1 {
+      color: #8f938f; /* Change to the light mode header text color */
+      font-size: 50px;
+    }
+  
+    .chat-container.dark-mode {
+      background-color: #1e1e1e; /* Dark mode container background color */
+      color: #fff; /* Dark mode text color */
+    }
+  
+    .chat-header.dark-mode,
+    .search.dark-mode {
+      background-color: #333; /* Dark mode header background color */
+      color: #fff; /* Dark mode header text color */
+    }
+  
+    .chat-messages.dark-mode {
+      background-color: #000000; /* Dark mode messages background color (black) */
+      color: #fff; /* Dark mode text color */
+    }
+  
+    .message .text.dark-mode,
+    .chat-input.dark-mode {
+      background-color: #424242; /* Dark mode input background color */
+      color: #fff; /* Dark mode input text color */
+    }
+  
+    .message .text.dark-mode {
+      background-color: #000080; /* Dark mode message text background color (blue) */
+      color: #fff; /* Dark mode message text color */
+    }
+  
+    .input-field.dark-mode {
+      border: 1px solid #555;
+    }
+  
+    #send-button.dark-mode {
+      background-color: #4CAF50;
+      color: #fff;
+    }
+  
+    .message.sent .text.dark-mode {
+      color: #ffffff; /* Dark mode sent message text color */
+      background-color: #63c366;
+    }
+  </style>
+  
+  
+
+</head>
+<body>
+  <h1>ChatCon</h1>
+  <div class="chat-container">
+    <div class="chat-header">Chat App
+      <div id="user"><%= Username %></div>
+    </div>
+    <div class="search">
+      <input type="text" id="searchInput" placeholder="Search users">
+      <button onclick="searchUsers()" id="send-button1">Search</button>
+      <button onclick="darkModeToggle()" id="send-button1">Dark</button>
+    </div>
+    <div class="chat-messages" id="chat"></div>
+    <div class="chat-input">
+      <input type="text" class="input-field" id="text" placeholder="Type your message" required>
+      <button type="button" id="send-button" onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+  <!-- Display search results -->
+  <ul id="searchResults"></ul>
+
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+
+  <script>
+    console.log('Client script running');
+
+    const socket = io();
+    console.log('Socket connection established:', socket.connected);
+
+    const user = $('#user').text(); // Get the username
+
+    function searchUsers() {
+      const searchQuery = $('#searchInput').val();
+      socket.emit('searchUsers', { query: searchQuery });
+    }
+
+    socket.on('searchResults', function (results) {
+      const searchResultsList = $('#searchResults');
+      searchResultsList.empty();
+
+      results.forEach((user) => {
+        searchResultsList.append(`<li>${user.name} - ${user.email} <button onclick="sendMessage('${user.name}')">Message</button></li>`);
+      });
+    });
+
+    function sendMessage(receiver) {
+      const message = prompt(`Compose your message to ${receiver}`);
+      socket.emit('privateMessage', { receiver, message });
+    }
+
+    function sendMessage() {
+      const text = $('#text').val();
+      socket.emit('chat message', { user, text });
+      $('#text').val('');
+    }
+
+    $('#messageForm').submit(function (event) {
+      event.preventDefault();
+      const text = $('#text').val();
+      socket.emit('chat message', { user, text });
+      $('#text').val('');
+    });
+
+    socket.on('chat message', function (msg) {
+      const chatContainer = $('#chat');
+      const messageClass = msg.user === user ? 'sent' : '';
+      const messageHtml = `<div class="message ${messageClass}"><span class="user">${msg.user}:</span><span class="text">${msg.text}</span></div>`;
+      chatContainer.append(messageHtml);
+      chatContainer.scrollTop(chatContainer[0].scrollHeight);
+    });
+
+    socket.on('privateMessage', function (data) {
+      $('#chat').append(`<p><strong>${data.sender} (Private):</strong> ${data.message}</p>`);
+    });
+    
+
+    socket.emit('join', user);
+
+    // Toggle dark mode
+    const darkModeToggle = () => {
+      const body = document.body;
+      body.classList.toggle('dark-mode');
+    };
+  </script>
+</body>
+</html>

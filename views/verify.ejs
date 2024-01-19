@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="form">
+        <h2>OTP Verification</h2>
+        <form action="/verify" method="post">
+            <div class="form-groups">
+                <label for="otp">Enter OTP sent to registered email Id</label>
+                <input type="text" id="otp" name="otp" placeholder="Enter OTP" required autocomplete="off">
+            </div>
+
+            <input type="hidden" name="savedOTP" value="<%= otp %>">
+
+            <button type="submit" class="submit-btn">Verify OTP</button>
+        </form>
+    </div>
+</body>
+</html>
